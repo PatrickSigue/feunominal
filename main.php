@@ -58,9 +58,24 @@
             <input type="text" placeholder="Search...">
           </div>
         </div>
-        <div class="links">
-          <a href="#" id = "openModal"><img src="assets/tam.png" height="50"></a>
-        </div>
+        <?php if (isset($_SESSION['f_name'])): ?>
+          <div class="nav-links">
+            <div class="links">
+              <li>
+                <a href="#"><?php echo "Hi " . htmlspecialchars($_SESSION['f_name']."!");?></a>
+                <i class='bx bxs-chevron-down htmlcss-arrow arrow  '></i>
+                <ul class="htmlCss-sub-menu sub-menu">
+                  <li><a href="#">Profile</a></li>
+                  <li><a href="php/logout.php">Log Out</a></li> 
+                </ul>
+              </li>
+            </div>
+          </div>
+          <?php else: ?>
+            <div class="links">
+              <a href="#" id = "openModal"><img src="assets/tam.png" height="50"></a>
+            </div>
+          <?php endif; ?> 
       </div>
     </nav>
   
@@ -84,14 +99,15 @@
               <div class="slider-tab"></div>
             </div>
             <div class="form-inner">
-              <form action="#" class="login" autocomplete="off">
+              <form action="php/login.php" class="login" autocomplete="off" method="POST">
                 <div class="field">
-                  <input type="email" placeholder="Email Address" required>
+                  <input type="email" name = 'email' id="email" placeholder="Email Address" required>
                 </div>
                 <div class="field">
-                  <input type="password" placeholder="Password" required>
+                  <input type="password" id="password" name="password" placeholder="Password" required>
                 </div>
                 <div class="pass-link"><a href="#">Forgot password?</a></div>
+                <input type="hidden" name="redirect_to" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>" />
                 <div class="field btn">
                   <div class="btn-layer"></div>
                   <input type="submit" value="Login">
