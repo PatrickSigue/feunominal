@@ -44,7 +44,7 @@ Feunominal Events aims to:
 
 ### 📅 Submission Details
 
-This README accompanies the final submission of our group project for the second semester of A.Y. 2024-2025.
+This README accompanies the final submission of our summative assesment 2 for the second semester of A.Y. 2024-2025.
 
 ---
 
