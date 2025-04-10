@@ -33,9 +33,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     		$sql = "INSERT INTO users (f_name,s_name, email, password, user_type, created_at) VALUES ('$fname', '$lname', '$email', '$password', 'customer', now())";
 
 	    	if ($conn->query($sql) === TRUE) {
-	    		 $_SESSION['error'] = 'New record created successfully';
-	    	     header("Location: " . $_SERVER['HTTP_REFERER']);
-	    	     exit();
+	    		$_SESSION['error'] = 'New record created successfully';
+	    	    header("Location: " . $_SERVER['HTTP_REFERER']);
+	    	    exit();
 	    	} else {
 	    		$_SESSION['error'] = 'Error: ' . $conn->	error;
 	    	    header("Location: " . $_SERVER['HTTP_REFERER']);

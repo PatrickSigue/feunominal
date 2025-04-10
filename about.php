@@ -24,9 +24,10 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="UTF-8">
-    <title>FEUNOMINAL EVENTS</title>
+    <title>About Us</title>
     <link rel="stylesheet" href="css/nav.css">
     <link rel="stylesheet" href="css/loginpopup.css">
+    <link rel="stylesheet" href="css/about.css">
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="assets/tam.svg">
@@ -63,7 +64,7 @@
             <div class="links">
               <li>
                 <img src="assets/chic.png" height="50">&nbsp;<a href="#"><?php echo htmlspecialchars($_SESSION['f_name']);?></a>
-                <i class='bx bxs-chevron-down htmlcss-arrow arrow'></i>
+                <i class='bx bxs-chevron-down htmlcss-arrow arrow  '></i>
                 <ul class="htmlCss-sub-menu sub-menu">
                   <li><a href="#">Profile</a></li>
                   <li><a href="php/logout.php">Log Out</a></li> 
@@ -78,12 +79,137 @@
           <?php endif; ?> 
       </div>
     </nav>
-  
-    <div class = "rowone">
-      <h2>Testing main</h2>
-    </div>
-    <div class="row">
-      <h2>add categories</h2>
+
+    <div class="grid-container">
+      <div class="profile-card">
+        <div class="profile-card-header">
+          <div class="profile-image img-1"></div>
+    
+          <div class="profile-info">
+            <h3 class="profile-name">Julian Quijano</h3>
+            <p class="profile-desc">Ethical Hacker/Programmer</p>
+          </div>
+        </div>
+    
+        <div class="profile-card-body">
+          <ul class="status">
+            <li>
+              <span class="status-value">532</span>
+              <span class="status-text">Posts</span>
+            </li>
+            <li>
+              <span class="status-value">1.5m</span>
+              <span class="status-text">Followers</span>
+            </li>
+            <li>
+              <span class="status-value">423</span>
+              <span class="status-text">Following</span>
+            </li>
+          </ul>
+    
+          <div class="action">
+            <button class="btn btn-pink">Follow</button>
+            <button class="btn btn-gray-outline">Message</button>
+          </div>
+        </div>
+      </div>
+    
+      <div class="profile-card">
+        <div class="profile-card-header">
+          <div class="profile-image img-2"></div>
+    
+          <div class="profile-info">
+            <h3 class="profile-name">Owen Santiago</h3>
+            <p class="profile-desc">Ethical Hacker/Programmer</p>
+          </div>
+        </div>
+    
+        <div class="profile-card-body">
+          <ul class="status">
+            <li>
+              <span class="status-value">532</span>
+              <span class="status-text">Posts</span>
+            </li>
+            <li>
+              <span class="status-value">1.5m</span>
+              <span class="status-text">Followers</span>
+            </li>
+            <li>
+              <span class="status-value">423</span>
+              <span class="status-text">Following</span>
+            </li>
+          </ul>
+    
+          <div class="action">
+            <button class="btn btn-pink">Follow</button>
+            <button class="btn btn-gray-outline">Message</button>
+          </div>
+        </div>
+      </div>
+      <div class="profile-card">
+        <div class="profile-card-header">
+          <div class="profile-image img-3"></div>
+    
+          <div class="profile-info">
+            <h3 class="profile-name">Patrick Sigue</h3>
+            <p class="profile-desc">Ethical Hacker/Programmer</p>
+          </div>
+        </div>
+    
+        <div class="profile-card-body">
+          <ul class="status">
+            <li>
+              <span class="status-value">532</span>
+              <span class="status-text">Posts</span>
+            </li>
+            <li>
+              <span class="status-value">1.5m</span>
+              <span class="status-text">Followers</span>
+            </li>
+            <li>
+              <span class="status-value">423</span>
+              <span class="status-text">Following</span>
+            </li>
+          </ul>
+    
+          <div class="action">
+            <button class="btn btn-pink">Follow</button>
+            <button class="btn btn-gray-outline">Message</button>
+          </div>
+        </div>
+      </div>
+      <div class="profile-card">
+        <div class="profile-card-header">
+          <div class="profile-image img-4"></div>
+    
+          <div class="profile-info">
+            <h3 class="profile-name">Aldrin Tupas</h3>
+            <p class="profile-desc">Ethical Hacker/Programmer</p>
+          </div>
+        </div>
+    
+        <div class="profile-card-body">
+          <ul class="status">
+            <li>
+              <span class="status-value">532</span>
+              <span class="status-text">Posts</span>
+            </li>
+            <li>
+              <span class="status-value">1.5m</span>
+              <span class="status-text">Followers</span>
+            </li>
+            <li>
+              <span class="status-value">423</span>
+              <span class="status-text">Following</span>
+            </li>
+          </ul>
+    
+          <div class="action">
+            <button class="btn btn-pink">Follow</button>
+            <button class="btn btn-gray-outline">Message</button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div id="modal" class="modal">
@@ -139,7 +265,6 @@
             </div>
           </div>
         </div>
-      </div>
     </div>
 
     <script src="script/nav.js"></script>
