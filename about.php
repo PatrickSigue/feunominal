@@ -80,6 +80,18 @@
       </div>
     </nav>
 
+<section class="about-section">
+  <div class="content">
+    <div class="usekawit" style="margin-left: 50%; margin-top:40px;">ABOUT US</div>
+      <p style="font-family: Poppins, sans-serif;font-size: 25px; margin-left: 50%; margin-top: 40px; color: white; margin-right: 50px; text-align: right ;">
+    This project, Feunominal Events, is an online ticketing service designed to streamline the movie booking experience. The four of us started this project to show our love for cinema and the arts. Users can browse available movies, view movie seating arrangements, and securely purchase tickets—all from a user-friendly web interface. We hope to be able to provide customers a sophisticated website which offers a centralized platform for movie organizers and attendees, provides customizable or default seat plans for each venue, displays venue addresses stored separately for flexibility, and ensures smooth ticket purchasing and seat selection. We hope to share the beauty of films and cinema to everyone interested.</p>
+  </div>
+</section>
+
+<div class="usekawit" style="margin-top: 20px;">
+THE FEUNTASTIC FOUR
+</div>
+
     <div class="grid-container">
       <div class="profile-card">
         <div class="profile-card-header">
