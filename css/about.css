@@ -14,7 +14,21 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 2rem;
+  flex-direction: column;
+}
+
+@font-face {
+    font-family: 'Kawit'; 
+    src: url('../fonts/Kawit.ttf') format('truetype'), 
+}
+
+.usekawit {
+  color:gold; 
+  margin-bottom: 20px; 
+  font-family: Kawit, sans-serif; 
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+  font-size: 3.5rem;
+  -webkit-text-stroke: 1px black;
 }
 
 .title {
@@ -26,8 +40,38 @@ body {
   text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
 }
 
+.about-section {
+    position: relative; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+    height: 100vh; 
+    overflow: hidden; 
+}
+
+.about-section::before {
+    content: "";
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    right: 0; 
+    bottom: 0;  
+    background-image: url('https://news.clas.ufl.edu/wp-content/uploads/sites/4/2016/08/AdobeStock_38070606-1-2000x1200.jpeg');
+    background-repeat: no-repeat; 
+    background-size: cover;
+    filter: grayscale(70%); 
+    z-index: 1; 
+}
+
+.about-section .content {
+    position: relative; 
+    z-index: 2; 
+    color: white; 
+    text-align: center; 
+}
+
 .grid-container {
-  margin-top: 100px;
+  margin-top: 30px;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 2rem;
