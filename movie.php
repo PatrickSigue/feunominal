@@ -18,9 +18,40 @@
       unset($_SESSION['error']);
   }
 
-  $sql = "SELECT event_name, poster FROM events";
-  $result = $conn->query($sql);
+  $movie = "SELECT DISTINCT m.movie_id, m.movie_title, m.poster, m.banner FROM movies m JOIN showings s ON m.movie_id = s.movie_id WHERE s.show_date >= CURDATE() ORDER BY s.show_date LIMIT 10";
+  $result = $conn->query($movie);
+  
+  $movies = [];
+  
+  if ($result && $result->num_rows > 0) {
+      while($row = $result->fetch_assoc()) {
+          $movies[] = $row;
+      }
+  }
 
+  $venue = "SELECT v.venue_id,v.venue_name, m.movie_id, m.movie_title, m.poster, m.banner FROM venues v JOIN cinemas c ON v.venue_id = c.venue_id JOIN showings s ON c.cinema_id = s.cinema_id JOIN movies m ON s.movie_id = m.movie_id WHERE s.show_date >= CURDATE() GROUP BY v.venue_id, m.movie_id ORDER BY v.venue_name, m.movie_title";
+
+  $result = $conn->query($venue);
+  
+  $venues = [];
+  
+  while ($row = mysqli_fetch_assoc($result)) {
+      $venueId = $row['venue_id'];
+      
+      if (!isset($venues[$venueId])) {
+          $venues[$venueId] = [
+              'venue_name' => $row['venue_name'],
+              'movies' => []
+          ];
+      }
+  
+      $venues[$venueId]['movies'][] = [
+          'movie_id' => $row['movie_id'],
+          'movie_title' => $row['movie_title'],
+          'poster' => $row['poster'],
+          'banner' => $row['banner']
+      ];
+  }
 ?>
 
 <!DOCTYPE html>
@@ -33,20 +64,8 @@
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="assets/tam.svg">
-    <style>
-      .poster-container {
-          text-align: center; /* Center align the text */
-          margin: 20px;      /* Add some margin */
-      }
-      .poster-image {
-          width: 200px;      /* Set a fixed width for images */
-          height: auto;      /* Maintain aspect ratio */
-      }
-      .poster-name {
-          font-size: 18px;   /* Set font size for the event name */
-          margin-top: 10px;  /* Add space above the name */
-      }
-    </style>
+    <link rel="stylesheet" href="css/movie.css">
+      
   </head>
   <body>
     <nav>
@@ -54,16 +73,25 @@
         <a href="main.php"><img src="assets/feunominal_nav.png" height="50"></a>
         <div class="nav-links">
           <ul class="links">
-            <li><a href="main.php">HOME</a></li>
+            <li><a href="main.php">EVENTS</a></li>
             <li>
-              <a href="#">CATEGORIES</a>
+              <a href="#">GENRES</a>
               <i class='bx bxs-chevron-down htmlcss-arrow arrow  '></i>
-              <ul class="htmlCss-sub-menu sub-menu">
-                <li><a href="movie.php">MOVIES</a></li>
-                <li><a href="#">CONCERTS</a></li>
-                <li><a href="#">FESTIVALS</a></li>
-                <li><a href="#">PLAYS</a></li>  
-              </ul>
+              <?php
+                $genre_sql = "SELECT genre FROM genres ORDER BY genre DESC LIMIT 5";
+                $genre_result = $conn->query($genre_sql);
+              
+                if ($genre_result && $genre_result->num_rows > 0) {
+                    echo "<ul class='htmlCss-sub-menu sub-menu'>";
+                    while($genre = $genre_result->fetch_assoc()) {
+                        echo "<li><a href='genre.php?name=" . urlencode($genre['genre']) . "'>" . htmlspecialchars($genre['genre']) . "</a></li>";
+                    }
+                    echo "</ul>";
+
+                } else {
+                    echo "<ul class='htmlCss-sub-menu sub-menu'><li><a href='#'>No genres</a></li></ul>";
+                }
+              ?>
             </li>
             <li><a href="about.php">ABOUT US</a></li>
             <li><a href="#">CONTACT US</a></li>
@@ -79,7 +107,7 @@
           <div class="nav-links">
             <div class="links">
               <li>
-                <img src="assets/chic.png" height="50">&nbsp;<a style = "font-family: 'Kawit';"href="#"><?php echo htmlspecialchars($_SESSION['f_name']);?></a>
+                <img src="assets/chic.png" height="50">&nbsp;<a href="#"><?php echo htmlspecialchars($_SESSION['f_name']);?></a>
                 <i class='bx bxs-chevron-down htmlcss-arrow arrow'></i>
                 <ul class="htmlCss-sub-menu sub-menu">
                   <li><a href="#">Profile</a></li>
@@ -95,26 +123,51 @@
           <?php endif; ?> 
       </div>
     </nav>
-  
-    <div class = "rowone">
-      <h2>Testing main</h2>
-    </div>
-    <div class="row">
-      <?php
-      if ($result->num_rows > 0) {
-          // Output data of each row
-          while($row = $result->fetch_assoc()) {
-              echo "<div class='poster-container'>";
-              echo "<img class='poster-image' src='" . htmlspecialchars($row["poster"]) . "' alt='" . htmlspecialchars($row["event_name"]) . "'>"; // Poster image
-              echo "<h2 class='poster-name'>" . htmlspecialchars($row["event_name"]) . "</h2>"; // Event name below the poster
+    <div class="rowone-wrapper">
+      <div class="rowone">
+        <?php
+          if (!empty($movies)) {
+            foreach($movies as $row) {
+              echo "<div class='banner-container'>";
+              echo "<a href='movie_details.php?movie_id=" . urlencode($row['movie_id']) . "'>";
+              echo "<img class='banner-image' src='" . htmlspecialchars($row["banner"]) . "' alt='" . htmlspecialchars($row["movie_title"]) . "'>";
+              echo "</a>";
               echo "</div>";
+            }
+          } else {
+              echo "No banners available.";
           }
-      } else {
-          echo "No posters available.";
-      }
-      ?>
+        ?>
+      </div>
+      <div class="banner-indicators">
+          <?php foreach ($movies as $index => $row): ?>
+            <span class="dot" data-index="<?= $index ?>"></span>
+          <?php endforeach; ?>
+        </div>
     </div>
-
+    <?php
+      foreach ($venues as $venueId => $venue) {
+        echo "<h2 class='venue-name'>" . htmlspecialchars($venue['venue_name']) . "</h2>";
+        echo "<hr>";
+        echo "<div class='row'>";
+    
+        foreach ($venue['movies'] as $movie) {
+            $movieId = $movie['movie_id'];
+            $movieTitle = htmlspecialchars($movie['movie_title']);
+            $poster = htmlspecialchars($movie['poster']);
+            $link = "movie_details.php?movie_id={$movieId}";
+    
+            echo "<div class='poster-container'>";
+            echo "<a href='{$link}'>";
+            echo "<img class='poster-image' src='{$poster}' alt='{$movieTitle}'>";
+            echo "</a>";
+            echo "<h2 class='poster-name'>{$movieTitle}</h2>";
+            echo "</div>";
+        }
+    
+        echo "</div>";
+      }
+    ?>
     <div id="modal" class="modal">
       <div class = "wrapper-container"></div>
         <div class="wrapper">
@@ -173,6 +226,7 @@
 
     <script src="script/nav.js"></script>
     <script src="script/loginpopup.js"></script>
+    <script src="script/banner_carousel.js"></script>
 
   </body>
 </html>
