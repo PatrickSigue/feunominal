@@ -49,16 +49,25 @@ while ($row = $res->fetch_assoc()) {
         <a href="main.php"><img src="assets/feunominal_nav.png" height="50"></a>
         <div class="nav-links">
           <ul class="links">
-            <li><a href="main.php">HOME</a></li>
+            <li><a href="main.php">EVENTS</a></li>
             <li>
-              <a href="#">CATEGORIES</a>
+              <a href="#">GENRES</a>
               <i class='bx bxs-chevron-down htmlcss-arrow arrow  '></i>
-              <ul class="htmlCss-sub-menu sub-menu">
-                <li><a href="movie.php">MOVIES</a></li>
-                <li><a href="#">CONCERTS</a></li>
-                <li><a href="#">FESTIVALS</a></li>
-                <li><a href="#">PLAYS</a></li>  
-              </ul>
+              <?php
+                $genre_sql = "SELECT genre FROM genres ORDER BY genre DESC LIMIT 5";
+                $genre_result = $conn->query($genre_sql);
+              
+                if ($genre_result && $genre_result->num_rows > 0) {
+                    echo "<ul class='htmlCss-sub-menu sub-menu'>";
+                    while($genre = $genre_result->fetch_assoc()) {
+                        echo "<li><a href='genre.php?name=" . urlencode($genre['genre']) . "'>" . htmlspecialchars($genre['genre']) . "</a></li>";
+                    }
+                    echo "</ul>";
+
+                } else {
+                    echo "<ul class='htmlCss-sub-menu sub-menu'><li><a href='#'>No genres</a></li></ul>";
+                }
+              ?>
             </li>
             <li><a href="about.php">ABOUT US</a></li>
             <li><a href="#">CONTACT US</a></li>
@@ -85,7 +94,7 @@ while ($row = $res->fetch_assoc()) {
           </div>
           <?php else: ?>
             <div class="links">
-              <a href="#" id="openModal"><img src="assets/tam.png" height="50"></a>
+              <a href="#" id = "openModal"><img src="assets/tam.png" height="50"></a>
             </div>
           <?php endif; ?> 
       </div>
@@ -116,7 +125,7 @@ while ($row = $res->fetch_assoc()) {
                         <ul>
                           <?php foreach ($times as $t): ?>
                             <li>
-                              <a href="booking.php?showing_id=<?= $t['showing_id'] ?>">
+                              <a class="open-seat-modal" data-showing-id="<?= $t['showing_id'] ?>">
                                 <?= date("g:i A", strtotime($t['time'])) ?>
                               </a>
                             </li>
@@ -187,8 +196,18 @@ while ($row = $res->fetch_assoc()) {
         </div>
       </div>
     </div>
-  
+
+    <div id="seatModal" class="seat-modal" style="display:none;">
+      <div class="seat-modal-content">
+        <span class="close">&times;</span>
+        <div id="seatModalBody">
+        </div>
+      </div>
+    </div>
+
     <script src="script/nav.js"></script>
     <script src="script/loginpopup.js"></script>
+    <script src="script/openseat.js"></script>
+
   </body>
 </html>

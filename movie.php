@@ -65,7 +65,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="assets/tam.svg">
     <link rel="stylesheet" href="css/movie.css">
-      
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
   </head>
   <body>
     <nav>
@@ -147,25 +147,34 @@
     </div>
     <?php
       foreach ($venues as $venueId => $venue) {
-        echo "<h2 class='venue-name'>" . htmlspecialchars($venue['venue_name']) . "</h2>";
-        echo "<hr>";
-        echo "<div class='row'>";
-    
-        foreach ($venue['movies'] as $movie) {
-            $movieId = $movie['movie_id'];
-            $movieTitle = htmlspecialchars($movie['movie_title']);
-            $poster = htmlspecialchars($movie['poster']);
-            $link = "movie_details.php?movie_id={$movieId}";
-    
-            echo "<div class='poster-container'>";
-            echo "<a href='{$link}'>";
-            echo "<img class='poster-image' src='{$poster}' alt='{$movieTitle}'>";
-            echo "</a>";
-            echo "<h2 class='poster-name'>{$movieTitle}</h2>";
-            echo "</div>";
-        }
-    
-        echo "</div>";
+          echo "<h2 class='venue-name'>" . htmlspecialchars($venue['venue_name']) . "</h2>";
+          echo "<hr>";
+          echo "<div class='swiper-container'>";
+          echo "<div class='swiper mySwiper'>";
+          echo "<div class='swiper-wrapper'>";
+      
+          foreach ($venue['movies'] as $movie) {
+              $movieId = $movie['movie_id'];
+              $movieTitle = htmlspecialchars($movie['movie_title']);
+              $poster = htmlspecialchars($movie['poster']);
+              $link = "movie_details.php?movie_id={$movieId}";
+      
+              echo "<div class='swiper-slide'>";
+              echo "<div class='poster-container'>";
+              echo "<a href='{$link}'>";
+              echo "<img class='poster-image' src='{$poster}' alt='{$movieTitle}'>";
+              echo "</a>";
+              echo "<h2 class='poster-name'>{$movieTitle}</h2>";
+              echo "</div>";
+              echo "</div>";
+          }
+      
+          echo "</div>";
+          echo "<div class='swiper-button-next'></div>";
+          echo "<div class='swiper-button-prev'></div>";
+          echo "<div class='swiper-pagination'></div>";
+          echo "</div>";
+          echo "</div>";
       }
     ?>
     <div id="modal" class="modal">
@@ -227,6 +236,8 @@
     <script src="script/nav.js"></script>
     <script src="script/loginpopup.js"></script>
     <script src="script/banner_carousel.js"></script>
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script src="script/poster_carousel.js"></script>
 
   </body>
 </html>

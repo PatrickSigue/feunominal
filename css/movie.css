@@ -37,17 +37,25 @@
 .poster-container {
   margin: 10px;
   text-align: center;
+  width: 225px; /* Set a fixed width for all poster containers */
+  display: inline-block;
 }
+
 .poster-image {
   height: 400px; 
-  width: 225px;
+  width: 100%; /* Make the image take up the full width of the container */
   object-fit: cover;
 }
+
 .poster-name {
   font-family: 'Kawit';
   font-size: 20px;
   margin-top: 10px;
+  word-wrap: break-word; /* Enable word wrapping */
+  white-space: normal; /* Ensure the text wraps instead of overflowing */
+  max-width: 100%; /* Prevent text from overflowing the container */
 }
+
 .venue-name {
   font-family: 'Kawit';
   font-size: 50px;
@@ -86,4 +94,36 @@ hr{
     border: none; /* Remove default border */
     width: 100%; /* Full width */
     margin: 0 20px; /* Margin above and below */
+}
+
+.swiper-container {
+    max-width: 80vw; /* Adjust to leave space on both sides */
+    margin: 0 auto; /* Center the container horizontally */
+}
+
+.swiper {
+    width: 100%;
+    max-width: 100%;
+    padding: 10px 0; /* Simplified padding */
+}
+
+.swiper-wrapper {
+    max-width: 100%;
+    margin-left: 0; /* Remove left margin since the parent is centered */
+}
+
+.swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+    color: #EFBF04 !important;
+}
+
+.swiper-pagination-bullet {
+  margin-top: 5px !important;
+  background: #EFBF04 !important;
 }
