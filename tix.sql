@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 16, 2025 at 07:54 AM
+-- Generation Time: Apr 16, 2025 at 08:05 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -182,7 +182,41 @@ INSERT INTO `movie_genres` (`movie_id`, `genre_id`) VALUES
 (5, 4),
 (5, 5),
 (6, 13),
-(6, 16);
+(6, 16),
+(7, 2),
+(7, 14),
+(7, 37),
+(8, 1),
+(8, 5),
+(8, 14),
+(9, 2),
+(9, 13),
+(9, 16),
+(9, 38),
+(9, 39),
+(10, 2),
+(10, 5),
+(10, 17),
+(10, 18),
+(11, 17),
+(11, 40),
+(12, 17),
+(12, 18),
+(12, 38),
+(12, 41),
+(13, 2),
+(13, 4),
+(13, 5),
+(14, 21),
+(15, 2),
+(15, 14),
+(15, 17),
+(15, 38),
+(16, 2),
+(16, 3),
+(16, 4),
+(16, 5),
+(16, 38);
 
 -- --------------------------------------------------------
 
@@ -204,7 +238,9 @@ CREATE TABLE `movie_tickets` (
 
 INSERT INTO `movie_tickets` (`movie_tix_id`, `showing_id`, `seat_id`, `user_id`, `booking_time`) VALUES
 (5, 45, 13, 2, '2025-04-16 13:53:14'),
-(6, 45, 14, 2, '2025-04-16 13:53:14');
+(6, 45, 14, 2, '2025-04-16 13:53:14'),
+(7, 36, 15, 2, '2025-04-16 14:04:22'),
+(8, 36, 16, 2, '2025-04-16 14:04:22');
 
 -- --------------------------------------------------------
 
@@ -227,7 +263,9 @@ CREATE TABLE `seats` (
 
 INSERT INTO `seats` (`seats_id`, `cinema_id`, `user_id`, `showing_id`, `seat_row`, `seat_number`) VALUES
 (13, 2, 2, 45, 'F', 4),
-(14, 2, 2, 45, 'F', 5);
+(14, 2, 2, 45, 'F', 5),
+(15, 3, 2, 36, 'G', 6),
+(16, 3, 2, 36, 'G', 7);
 
 -- --------------------------------------------------------
 
@@ -455,13 +493,13 @@ ALTER TABLE `movies`
 -- AUTO_INCREMENT for table `movie_tickets`
 --
 ALTER TABLE `movie_tickets`
-  MODIFY `movie_tix_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `movie_tix_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `seats`
 --
 ALTER TABLE `seats`
-  MODIFY `seats_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `seats_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `showings`
