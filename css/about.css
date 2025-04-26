@@ -56,7 +56,7 @@ body {
     left: 0; 
     right: 0; 
     bottom: 0;  
-    background-image: url('https://news.clas.ufl.edu/wp-content/uploads/sites/4/2016/08/AdobeStock_38070606-1-2000x1200.jpeg');
+    background-image:  url('../assets/about-section.jpg');
     background-repeat: no-repeat; 
     background-size: cover;
     filter: grayscale(70%); 
