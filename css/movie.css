@@ -39,12 +39,15 @@
   text-align: center;
   width: 225px; /* Set a fixed width for all poster containers */
   display: inline-block;
+  height: fit-content;
 }
 
 .poster-image {
-  height: 400px; 
-  width: 100%; /* Make the image take up the full width of the container */
+  border-radius: 5px;
+  height: 400px;
+  width: 100%;
   object-fit: cover;
+  box-shadow: -5px 0 10px rgba(0, 0, 0, 0.5); /* Shadow on the left side */
 }
 
 .poster-name {
@@ -62,6 +65,8 @@
   color: #1e3504;
   margin-top: 10px;
   margin-left: 10vw;
+  padding-left: 10px;
+  background: linear-gradient(to right, rgba(239, 191, 4, .9), rgba(239, 191, 4, .50), rgba(239, 191, 4, 0));
 }
 .banner-indicators {
   position: absolute;
@@ -74,21 +79,21 @@
   height: 12px;
   width: 12px;
   margin: 0 5px;
-  background-color: rgba(255,255,255,0.6);
+  background-color: rgba(30, 53, 4, 0.6);
   border-radius: 50%;
   display: inline-block;
   cursor: pointer;
   transition: background-color 0.3s;
 }
 .dot.active {
-  background-color: #fff;
+  background-color: #EFBF04;
 }
 .rowone-wrapper {
   position: relative;
 }
 
 hr{
-    height: 12px;
+    height: 15px;
     border: 0;
     box-shadow: inset 0 12px 12px -12px rgba(239, 191, 4, 0.5);
     border: none; /* Remove default border */

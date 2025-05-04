@@ -18,7 +18,7 @@
       unset($_SESSION['error']);
   }
 
-  $movie = "SELECT DISTINCT m.movie_id, m.movie_title, m.poster, m.banner FROM movies m JOIN showings s ON m.movie_id = s.movie_id WHERE s.show_date >= CURDATE() ORDER BY s.show_date LIMIT 10";
+  $movie = "SELECT DISTINCT m.movie_id, m.movie_title, m.poster, m.banner, m.archived FROM movies m JOIN showings s ON m.movie_id = s.movie_id WHERE s.show_date >= CURDATE() AND m.archived = 0 ORDER BY s.show_date LIMIT 10";
   $result = $conn->query($movie);
   
   $movies = [];
@@ -29,7 +29,7 @@
       }
   }
 
-  $venue = "SELECT v.venue_id,v.venue_name, m.movie_id, m.movie_title, m.poster, m.banner FROM venues v JOIN cinemas c ON v.venue_id = c.venue_id JOIN showings s ON c.cinema_id = s.cinema_id JOIN movies m ON s.movie_id = m.movie_id WHERE s.show_date >= CURDATE() GROUP BY v.venue_id, m.movie_id ORDER BY v.venue_name, m.movie_title";
+  $venue = "SELECT v.venue_id,v.venue_name, m.movie_id, m.movie_title, m.poster, m.banner, m.archived, v.archived FROM venues v JOIN cinemas c ON v.venue_id = c.venue_id JOIN showings s ON c.cinema_id = s.cinema_id JOIN movies m ON s.movie_id = m.movie_id WHERE s.show_date >= CURDATE() AND m.archived = 0 AND v.archived = 0 GROUP BY v.venue_id, m.movie_id ORDER BY v.venue_name";
 
   $result = $conn->query($venue);
   
@@ -52,6 +52,11 @@
           'banner' => $row['banner']
       ];
   }
+
+  if (isset($_SESSION['error'])) {
+        echo "<script>alert('" . $_SESSION['error'] . " ');</script>";
+        unset($_SESSION['error']);
+    }
 ?>
 
 <!DOCTYPE html>
@@ -70,12 +75,11 @@
   <body>
     <nav>
       <div class="navbar">
-        <a href="main.php"><img src="assets/feunominal_nav.png" height="50"></a>
+        <a href="movie.php"><img src="assets/feunominal_nav.png" height="50"></a>
         <div class="nav-links">
           <ul class="links">
-            <li><a href="main.php">EVENTS</a></li>
             <li>
-              <a href="#">GENRES</a>
+              <a href="genres.php?genre=Action">GENRES</a>
               <i class='bx bxs-chevron-down htmlcss-arrow arrow  '></i>
               <?php
                 $genre_sql = "SELECT genre FROM genres ORDER BY genre DESC LIMIT 5";
@@ -84,7 +88,7 @@
                 if ($genre_result && $genre_result->num_rows > 0) {
                     echo "<ul class='htmlCss-sub-menu sub-menu'>";
                     while($genre = $genre_result->fetch_assoc()) {
-                        echo "<li><a href='genre.php?name=" . urlencode($genre['genre']) . "'>" . htmlspecialchars($genre['genre']) . "</a></li>";
+                        echo "<li><a href='genres.php?genre=" . urlencode($genre['genre']) . "'>" . htmlspecialchars($genre['genre']) . "</a></li>";
                     }
                     echo "</ul>";
 
@@ -98,10 +102,12 @@
           </ul>
         </div>
         <div class="search-box">
-          <i class='bx bx-search'></i>
-          <div class="input-box">
-            <input type="text" placeholder="Search...">
-          </div>
+          <form action="search_result.php" method="GET">
+            <i class='bx bx-search'></i>
+            <div class="input-box">
+              <input type="text" name="search" placeholder="Search..." value="<?= isset($_GET['search']) ? htmlspecialchars($_GET['search']) : '' ?>">
+            </div>
+          </form>
         </div>
         <?php if (isset($_SESSION['f_name'])): ?>
           <div class="nav-links">
@@ -110,8 +116,8 @@
                 <img src="assets/chic.png" height="50">&nbsp;<a href="#"><?php echo htmlspecialchars($_SESSION['f_name']);?></a>
                 <i class='bx bxs-chevron-down htmlcss-arrow arrow'></i>
                 <ul class="htmlCss-sub-menu sub-menu">
-                  <li><a href="#">Profile</a></li>
-                  <li><a href="php/logout.php">Log Out</a></li> 
+                  <li><a href="profile.php">Profile</a></li>
+                  <li><a href="php/logout.php?redirect=<?= urlencode($_SERVER['REQUEST_URI']) ?>">Log Out</a></li>
                 </ul>
               </li>
             </div>

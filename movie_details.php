@@ -1,37 +1,59 @@
 <?php
-session_start();
-
-$host = 'localhost';
-$db = 'tix';
-$user = 'root';
-$pass = '';
-
-$conn = new mysqli($host, $user, $pass, $db);
-if ($conn->connect_error) die("Connection failed: " . $conn->connect_error);
-
-$movie_id = isset($_GET['movie_id']) ? intval($_GET['movie_id']) : 0;
-if (!$movie_id) die("Invalid request.");
-
-// Movie info
-$movie = $conn->query("SELECT movie_title, description, poster, banner FROM movies WHERE movie_id = $movie_id")->fetch_assoc();
-
-// Showings (group by venue > date > cinema > time)
-$sql = "SELECT s.showing_id, s.show_date, s.show_time, v.venue_name, c.cinema_id, c.name AS cinema_name, vc.show_count FROM showings s JOIN cinemas c ON s.cinema_id = c.cinema_id JOIN venues v ON c.venue_id = v.venue_id JOIN (SELECT v.venue_id, COUNT(*) AS show_count FROM showings s JOIN cinemas c ON s.cinema_id = c.cinema_id JOIN venues v ON c.venue_id = v.venue_id WHERE s.movie_id = $movie_id AND s.show_date >= CURDATE() GROUP BY v.venue_id) vc ON v.venue_id = vc.venue_id WHERE s.movie_id = $movie_id AND s.show_date >= CURDATE() ORDER BY vc.show_count DESC, v.venue_name, s.show_date, c.name, s.show_time";
-
-$res = $conn->query($sql);
-
-// Group by venue > date > cinema > time
-$grouped = [];
-while ($row = $res->fetch_assoc()) {
-    $venue = $row['venue_name'];
-    $date = $row['show_date'];
-    $cinema = $row['cinema_name'];
-
-    $grouped[$venue][$date][$cinema][] = [
-        'showing_id' => $row['showing_id'],
-        'time' => $row['show_time']
-    ];
-}
+  session_start();
+  
+  $host = 'localhost';
+  $db = 'tix';
+  $user = 'root';
+  $pass = '';
+  
+  $conn = new mysqli($host, $user, $pass, $db);
+  if ($conn->connect_error) die("Connection failed: " . $conn->connect_error);
+  
+  $movie_id = isset($_GET['movie_id']) ? intval($_GET['movie_id']) : 0;
+  if (!$movie_id) die("Invalid request.");
+  
+  $movie = $conn->query("SELECT movie_title, description, poster, banner FROM movies WHERE movie_id = $movie_id")->fetch_assoc();
+  
+  // Showings (group by venue > date > cinema > time)
+  $sql = "SELECT s.showing_id, s.show_date, s.show_time, s.price, v.venue_name, c.cinema_id, c.name AS cinema_name, vc.show_count, c.archived, s.archived 
+  FROM showings s JOIN cinemas c ON s.cinema_id = c.cinema_id JOIN venues v ON c.venue_id = v.venue_id 
+  JOIN (
+      SELECT v.venue_id, COUNT(*) AS show_count 
+      FROM showings s 
+      JOIN cinemas c ON s.cinema_id = c.cinema_id 
+      JOIN venues v ON c.venue_id = v.venue_id 
+      WHERE s.movie_id = $movie_id AND s.show_date >= CURDATE() 
+      GROUP BY v.venue_id
+  ) vc ON v.venue_id = vc.venue_id 
+  WHERE s.movie_id = $movie_id AND s.show_date >= CURDATE() AND c.archived = 0 AND s.archived = 0
+  ORDER BY vc.show_count DESC, v.venue_name, s.show_date, c.name, s.show_time";
+  
+  $res = $conn->query($sql);
+  
+  // Group by venue > date > cinema > time
+  $grouped = [];
+  while ($row = $res->fetch_assoc()) {
+      $venue = $row['venue_name'];
+      $date = $row['show_date'];
+      $cinema = $row['cinema_name'];
+      $price = $row['price'];
+  
+      if (!isset($grouped[$venue][$date][$cinema])) {
+          $grouped[$venue][$date][$cinema] = [
+              'price' => $price,
+              'times' => []
+          ];
+      }
+  
+      $grouped[$venue][$date][$cinema]['times'][] = [
+          'showing_id' => $row['showing_id'],
+          'time' => $row['show_time']
+      ];
+  }
+    if (isset($_SESSION['error'])) {
+          echo "<script>alert('" . $_SESSION['error'] . " ');</script>";
+          unset($_SESSION['error']);
+      }
 ?>
 
 <!DOCTYPE html>
@@ -42,16 +64,17 @@ while ($row = $res->fetch_assoc()) {
     <link rel="stylesheet" href="css/nav.css">
     <link rel="stylesheet" href="css/loginpopup.css">
     <link rel="stylesheet" href="css/movie_details.css">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
   </head>
   <body>
     <nav>
       <div class="navbar">
-        <a href="main.php"><img src="assets/feunominal_nav.png" height="50"></a>
+        <a href="movie.php"><img src="assets/feunominal_nav.png" height="50"></a>
         <div class="nav-links">
           <ul class="links">
-            <li><a href="main.php">EVENTS</a></li>
+            <li><a href="movie.php">MOVIES</a></li>
             <li>
-              <a href="#">GENRES</a>
+              <a href="genres.php?genre=Action">GENRES</a>
               <i class='bx bxs-chevron-down htmlcss-arrow arrow  '></i>
               <?php
                 $genre_sql = "SELECT genre FROM genres ORDER BY genre DESC LIMIT 5";
@@ -60,7 +83,7 @@ while ($row = $res->fetch_assoc()) {
                 if ($genre_result && $genre_result->num_rows > 0) {
                     echo "<ul class='htmlCss-sub-menu sub-menu'>";
                     while($genre = $genre_result->fetch_assoc()) {
-                        echo "<li><a href='genre.php?name=" . urlencode($genre['genre']) . "'>" . htmlspecialchars($genre['genre']) . "</a></li>";
+                        echo "<li><a href='genres.php?genre=" . urlencode($genre['genre']) . "'>" . htmlspecialchars($genre['genre']) . "</a></li>";
                     }
                     echo "</ul>";
 
@@ -74,10 +97,12 @@ while ($row = $res->fetch_assoc()) {
           </ul>
         </div>
         <div class="search-box">
-          <i class='bx bx-search'></i>
-          <div class="input-box">
-            <input type="text" placeholder="Search...">
-          </div>
+          <form action="search_result.php" method="GET">
+            <i class='bx bx-search'></i>
+            <div class="input-box">
+              <input type="text" name="search" placeholder="Search..." value="<?= isset($_GET['search']) ? htmlspecialchars($_GET['search']) : '' ?>">
+            </div>
+          </form>
         </div>
         <?php if (isset($_SESSION['f_name'])): ?>
           <div class="nav-links">
@@ -86,8 +111,8 @@ while ($row = $res->fetch_assoc()) {
                 <img src="assets/chic.png" height="50">&nbsp;<a href="#"><?php echo htmlspecialchars($_SESSION['f_name']);?></a>
                 <i class='bx bxs-chevron-down htmlcss-arrow arrow'></i>
                 <ul class="htmlCss-sub-menu sub-menu">
-                  <li><a href="#">Profile</a></li>
-                  <li><a href="php/logout.php">Log Out</a></li> 
+                  <li><a href="profile.php">Profile</a></li>
+                  <li><a href="php/logout.php?redirect=<?= urlencode($_SERVER['REQUEST_URI']) ?>">Log Out</a></li>
                 </ul>
               </li>
             </div>
@@ -119,11 +144,12 @@ while ($row = $res->fetch_assoc()) {
                 <?php foreach ($dates as $date => $cinemas): ?>
                   <div class="date-card">
                     <h3><?= date("F j, Y", strtotime($date)) ?></h3>
-                    <?php foreach ($cinemas as $cinema_name => $times): ?>
+                    <?php foreach ($cinemas as $cinema_name => $cinema_data): ?>
                       <div class="cinema-card">
                         <h4><?= htmlspecialchars($cinema_name) ?></h4>
+                        <p class="price">Price: ₱<?= number_format($cinema_data['price'], 2) ?></p>
                         <ul>
-                          <?php foreach ($times as $t): ?>
+                          <?php foreach ($cinema_data['times'] as $t): ?>
                             <li>
                               <a class="open-seat-modal" data-showing-id="<?= $t['showing_id'] ?>">
                                 <?= date("g:i A", strtotime($t['time'])) ?>
@@ -201,6 +227,14 @@ while ($row = $res->fetch_assoc()) {
       <div class="seat-modal-content">
         <span class="close">&times;</span>
         <div id="seatModalBody">
+        </div>
+      </div>
+    </div>
+
+    <div id="confirmModal" class="confirm-modal" style="display:none;">
+      <div class="confirm-modal-content">
+        <span class="close-confirm">×</span>
+        <div id="confirmModalBody">
         </div>
       </div>
     </div>

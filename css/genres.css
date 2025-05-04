@@ -1,0 +1,108 @@
+@font-face {
+  font-family: 'Kawit';
+  src: url('../assets/KawitFree-Italic.ttf') format('truetype');
+}
+
+.content-container {
+  display: flex;
+  flex-wrap: nowrap;
+  margin-top: 70px;
+}
+
+.side {
+  width: fit-content;
+  margin-right: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.genre-content {
+  max-width: 90vw;
+  flex-grow: 1;
+  padding: 20px;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.menu ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.menu ul li {
+  font-size: 20px;
+  background-color: rgba(30, 53, 4, 0.5);
+  border: 2px solid black;
+  width: 10vw;
+  height: 1.5em;
+  line-height: 1.5em;
+  position: relative;
+  overflow: hidden;
+  margin: 0.5em;
+  cursor: pointer;
+}
+
+.menu ul li span {
+  font-family: 'Kawit', sans-serif;
+  color: black;
+  mix-blend-mode: difference;
+}
+
+.menu ul li::before {
+  content: '';
+  position: absolute;
+  width: 1.5em;
+  height: inherit;
+  background-color: rgba(239, 191, 4, .5);
+  border-radius: 50%;
+  top: 0;
+  left: -0.75em;
+  transition: 0.5s ease-out;
+}
+
+.menu ul li:hover::before {
+  transform: scale(12);
+}
+
+.menu ul li a {
+  display: block;
+  text-decoration: none;
+  height: 100%;
+  width: 100%;
+}
+
+.menu ul li a.active span {
+  text-decoration: underline;
+
+}
+
+.poster-container {
+  margin-top: 10px;
+  margin-inline: 20px;
+  text-align: center;
+  width: 225px; /* Fixed width for all poster containers */
+  display: inline-block; /* Keeps containers in a row */
+  vertical-align: top; /* Aligns containers to the top to prevent uneven spacing */
+  box-sizing: border-box; /* Ensures padding/margins don't break the layout */
+}
+
+.poster-image {
+  border-radius: 5px;
+  height: 400px;
+  width: 100%;
+  object-fit: cover;
+  box-shadow: -5px 0 10px rgba(0, 0, 0, 0.5); /* Shadow on the left side */
+}
+
+.poster-name {
+  font-family: 'Kawit';
+  font-size: 20px;
+  margin-top: 10px;
+  overflow-wrap: break-word; /* Modern equivalent of word-wrap */
+  white-space: normal; /* Allows text to wrap */
+  max-width: 100%; /* Ensures text doesn't overflow the container */
+  line-height: 1.2; /* Improves readability of wrapped text */
+  text-align: center; /* Keeps text centered under the poster */
+}

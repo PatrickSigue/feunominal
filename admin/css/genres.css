@@ -1,0 +1,281 @@
+/* General container styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    padding: 20px;
+    margin: 0;
+    margin-top: 70px; /* Respect the fixed navbar */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center content horizontally */
+}
+
+/* Headings */
+h1, h2, h3 {
+    color: #1e3504;
+    margin-bottom: 15px;
+    text-align: center; /* Center headings */
+    width: 100%; /* Ensure headings take full width for consistency */
+}
+
+h1 {
+    font-size: 2rem;
+}
+
+h2 {
+    font-size: 1.5rem;
+    border-bottom: 2px solid #EFBF04; /* Accent color for underline */
+    padding-bottom: 5px;
+}
+
+h3 {
+    font-size: 1.2rem;
+    margin-top: 20px;
+}
+
+/* Section row for side-by-side layout */
+.section-row {
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    gap: 20px; /* Space between columns */
+    width: 100%;
+    margin-bottom: 30px;
+    justify-content: center; /* Center the row */
+}
+
+/* Section column for individual sections */
+.section-column {
+    flex: 1; /* Equal width for each column */
+    min-width: 300px; /* Minimum width to prevent squishing */
+    max-width: 45%; /* Slightly less than 600px to account for gap */
+}
+
+/* Form styling */
+form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    width: 100%; /* Full width of column */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center form content */
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #1e3504;
+    text-align: center; /* Center labels */
+}
+
+input[type="text"],
+select {
+    width: 100%;
+    max-width: 400px; /* Limit input width */
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #EFBF04; /* Accent color for borders */
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus,
+select:focus {
+    border-color: #1e3504; /* Primary color for focus */
+    outline: none;
+    box-shadow: 0 0 5px rgba(30, 53, 4, 0.3); /* Primary color shadow */
+}
+
+input[type="checkbox"] {
+    margin-right: 10px;
+    transform: scale(1.2);
+}
+
+button {
+    background-color: #1e3504; /* Primary color */
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #34491d; /* Hover color */
+}
+
+button:disabled {
+    background-color: #bdc3c7;
+    cursor: not-allowed;
+}
+
+/* Table styling (for other pages, not used here) */
+table {
+    width: 100%;
+    max-width: 600px;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+th, td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #EFBF04;
+}
+
+th {
+    background-color: #1e3504;
+    color: #fff;
+    font-weight: bold;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+td a {
+    color: #EFBF04;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+td a:hover {
+    color: #34491d;
+    text-decoration: underline;
+}
+
+/* Genre checkboxes container */
+.genre-checkboxes {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 genres per row */
+    gap: 10px; /* Space between checkboxes */
+    width: 100%;
+    margin-bottom: 15px;
+    justify-items: center; /* Center checkboxes */
+}
+
+.genre-checkboxes label {
+    display: flex;
+    align-items: center; /* Vertically center checkbox and text */
+    padding: 8px;
+    background-color: #f9f9f9; /* Light background */
+    border: 1px solid #EFBF04; /* Accent color border */
+    border-radius: 4px;
+    width: 100%; /* Full width of grid cell */
+    text-align: center; /* Center text */
+    cursor: pointer;
+}
+
+.genre-checkboxes label:hover {
+    background-color: #f1f1f1; /* Hover effect */
+}
+
+.genre-checkboxes input[type="checkbox"] {
+    margin-right: 8px; /* Space between checkbox and text */
+}
+
+/* Genre list container */
+.genre-list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 genres per row */
+    gap: 10px; /* Space between genre items */
+    width: 100%;
+    margin-bottom: 20px;
+    justify-items: center; /* Center items */
+}
+
+/* Individual genre item */
+.genre-item {
+    display: flex;
+    flex-direction: column; /* Stack genre name and delete link */
+    align-items: center; /* Center content */
+    padding: 12px;
+    background-color: #fff; /* White background */
+    border: 1px solid #EFBF04; /* Accent color border */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    width: 100%; /* Full width of grid cell */
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.genre-item:hover {
+    background-color: #f1f1f1; /* Hover effect */
+}
+
+.genre-item span {
+    font-weight: bold; /* Bold genre name */
+    color: #1e3504; /* Primary color */
+    margin-bottom: 8px; /* Space below genre name */
+}
+
+.genre-item a {
+    color: #EFBF04; /* Accent color for delete link */
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.genre-item a:hover {
+    color: #34491d; /* Hover color for link */
+    text-decoration: underline;
+}
+
+/* Associated genres container */
+#associated_genres {
+    margin-bottom: 15px;
+    width: 100%;
+    text-align: center; /* Center genres */
+}
+
+#associated_genres p {
+    color: #7f8c8d;
+    font-style: italic;
+}
+
+/* Responsive design */
+@media (max-width: 1200px) {
+    .section-row {
+        flex-direction: column; /* Stack sections vertically */
+        align-items: center;
+    }
+    .section-column {
+        max-width: 600px; /* Restore original max-width */
+    }
+}
+
+@media (max-width: 600px) {
+    form, .genre-list, .genre-checkboxes {
+        max-width: 100%;
+    }
+    .genre-checkboxes, .genre-list {
+        grid-template-columns: repeat(2, 1fr); /* 2 genres per row */
+    }
+    h1 {
+        font-size: 1.8rem;
+    }
+    h2 {
+        font-size: 1.3rem;
+    }
+    button {
+        width: 100%;
+        padding: 12px;
+    }
+    input[type="text"],
+    select {
+        max-width: 100%; /* Full width on small screens */
+    }
+}

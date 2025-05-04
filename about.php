@@ -18,6 +18,16 @@
       unset($_SESSION['error']);
   }
 
+  // Fetch all genres
+  $genres = [];
+  $genre_sql = "SELECT genre FROM genres";
+  $genre_result = $conn->query($genre_sql);
+  if ($genre_result && $genre_result->num_rows > 0) {
+      while ($row = $genre_result->fetch_assoc()) {
+          $genres[] = $row['genre'];
+      }
+  }
+
 ?>
 
 <!DOCTYPE html>
@@ -28,36 +38,40 @@
     <link rel="stylesheet" href="css/nav.css">
     <link rel="stylesheet" href="css/loginpopup.css">
     <link rel="stylesheet" href="css/about.css">
-    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="assets/tam.svg">
   </head>
   <body>
     <nav>
       <div class="navbar">
-        <a href="main.php"><img src="assets/feunominal_nav.png" height="50"></a>
+        <a href="movie.php"><img src="assets/feunominal_nav.png" height="50"></a>
         <div class="nav-links">
           <ul class="links">
-            <li><a href="main.php">HOME</a></li>
+            <li><a href="movie.php">HOME</a></li>
             <li>
-              <a href="#">CATEGORIES</a>
+              <a href="#">GENRES</a>
               <i class='bx bxs-chevron-down htmlcss-arrow arrow  '></i>
-              <ul class="htmlCss-sub-menu sub-menu">
-                <li><a href="#">MOVIES</a></li>
-                <li><a href="#">CONCERTS</a></li>
-                <li><a href="#">FESTIVALS</a></li>
-                <li><a href="#">PLAYS</a></li>  
-              </ul>
+              <?php if (!empty($genres)): ?>
+                <ul class='htmlCss-sub-menu sub-menu'>
+                  <?php foreach (array_slice(array_reverse($genres), 0, 5) as $genre): ?>
+                    <li><a href="genres.php?genre=<?= urlencode($genre) ?>"><?= htmlspecialchars($genre) ?></a></li>
+                  <?php endforeach; ?>
+                </ul>
+              <?php else: ?>
+                <ul class='htmlCss-sub-menu sub-menu'><li><a href='#'>No genres</a></li></ul>
+              <?php endif; ?>
             </li>
             <li><a href="about.php">ABOUT US</a></li>
-            <li><a href="#">CONTACT US</a></li>
           </ul>
         </div>
         <div class="search-box">
-          <i class='bx bx-search'></i>
-          <div class="input-box">
-            <input type="text" placeholder="Search...">
-          </div>
+          <form action="search_result.php" method="GET">
+            <i class='bx bx-search'></i>
+            <div class="input-box">
+              <input type="text" name="search" placeholder="Search..." value="<?= isset($_GET['search']) ? htmlspecialchars($_GET['search']) : '' ?>">
+            </div>
+          </form>
         </div>
         <?php if (isset($_SESSION['f_name'])): ?>
           <div class="nav-links">
@@ -66,8 +80,8 @@
                 <img src="assets/chic.png" height="50">&nbsp;<a href="#"><?php echo htmlspecialchars($_SESSION['f_name']);?></a>
                 <i class='bx bxs-chevron-down htmlcss-arrow arrow  '></i>
                 <ul class="htmlCss-sub-menu sub-menu">
-                  <li><a href="#">Profile</a></li>
-                  <li><a href="php/logout.php">Log Out</a></li> 
+                  <li><a href="profile.php">Profile</a></li>
+                  <li><a href="php/logout.php?redirect=<?= urlencode($_SERVER['REQUEST_URI']) ?>">Log Out</a></li>
                 </ul>
               </li>
             </div>
@@ -80,17 +94,17 @@
       </div>
     </nav>
 
-<section class="about-section">
-  <div class="content">
-    <div class="usekawit" style="margin-left: 50%; margin-top:40px;">ABOUT US</div>
-      <p style="font-family: Poppins, sans-serif;font-size: 25px; margin-left: 50%; margin-top: 40px; color: white; margin-right: 50px; text-align: right ;">
-    This project, Feunominal Events, is an online ticketing service designed to streamline the movie booking experience. The four of us started this project to show our love for cinema and the arts. Users can browse available movies, view movie seating arrangements, and securely purchase tickets—all from a user-friendly web interface. We hope to be able to provide customers a sophisticated website which offers a centralized platform for movie organizers and attendees, provides customizable or default seat plans for each venue, displays venue addresses stored separately for flexibility, and ensures smooth ticket purchasing and seat selection. We hope to share the beauty of films and cinema to everyone interested.</p>
-  </div>
-</section>
-
-<div class="usekawit" style="margin-top: 20px;">
-THE FEUNTASTIC FOUR
-</div>
+    <section class="about-section">
+      <div class="content">
+        <div class="usekawit" style="margin-left: 50%; margin-top:40px;">ABOUT US</div>
+          <p style="font-family: Poppins, sans-serif;font-size: 25px; margin-left: 50%; margin-top: 40px; color: white; margin-right: 50px; text-align: right ;">
+        This project, Feunominal Events, is an online ticketing service designed to streamline the movie booking experience. The four of us started this project to show our love for cinema and the arts.    Users can browse available movies, view movie seating arrangements, and securely purchase tickets—all from a user-friendly web interface. We hope to be able to provide customers a sophisticated   website which offers a centralized platform for movie organizers and attendees, provides customizable or default seat plans for each venue, displays venue addresses stored separately for     flexibility, and ensures smooth ticket purchasing and seat selection. We hope to share the beauty of films and cinema to everyone interested.</p>
+      </div>
+    </section>
+    
+    <div class="usekawit" style="margin-top: 20px;">
+    THE FEUNTASTIC FOUR
+    </div>
 
     <div class="grid-container">
       <div class="profile-card">

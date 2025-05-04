@@ -11,14 +11,26 @@ if ($conn->connect_error) die("Connection failed: " . $conn->connect_error);
 $showing_id = isset($_GET['showing_id']) ? intval($_GET['showing_id']) : 0;
 if (!$showing_id) die("Invalid showing ID.");
 
+$isLoggedIn = isset($_SESSION['user_id']);
+
+if (!$isLoggedIn) {
+    echo "<script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const modal = document.getElementById('loginModal');
+            if (modal) modal.style.display = 'flex';
+        });
+    </script>";
+}
+
 // Get cinema, movie, and seat details
 $sql = "SELECT m.movie_title, v.venue_name AS venue_name, c.cinema_id, c.name AS cinema_name, 
-                c.seat_rows, c.seat_columns, s.price
+               c.seat_rows, c.seat_columns, s.price, s.show_date, s.show_time
         FROM showings s 
         JOIN cinemas c ON s.cinema_id = c.cinema_id
         JOIN movies m ON s.movie_id = m.movie_id
         JOIN venues v ON c.venue_id = v.venue_id
         WHERE s.showing_id = $showing_id";
+
 $result = $conn->query($sql);
 if ($row = $result->fetch_assoc()) {
     $movie_title = $row['movie_title'];
@@ -28,6 +40,9 @@ if ($row = $result->fetch_assoc()) {
     $rows = intval($row['seat_rows']);
     $cols = intval($row['seat_columns']);
     $price = $row['price'];
+    $show_date = $row['show_date'];
+    $show_time = $row['show_time'];
+
 } else {
     die("Invalid showing ID or data.");
 }
@@ -43,10 +58,10 @@ while ($b = $bookedResult->fetch_assoc()) {
 $rowLabels = range('A', chr(ord('A') + $rows - 1));
 
 ?>
-
+<?php if ($isLoggedIn): ?>
 <!-- Seat Selection Form -->
-<h3>Select Seats for <?= htmlspecialchars($cinema_name) . ' - P' . htmlspecialchars($price) ?></h3>
-<form action="php/confirmation.php" method="POST">
+<h3 style="margin-bottom: 10px; text-align:center;">Select Seats for <?= htmlspecialchars($cinema_name) . ' - ₱' . htmlspecialchars($price) ?></h3>
+<form action="php/confirm_booking.php" method="POST">
     <div style="margin-bottom: 10px; text-align:center; font-weight: bold;">
         Screen This Way ↑
     </div>
@@ -76,11 +91,19 @@ $rowLabels = range('A', chr(ord('A') + $rows - 1));
     <input type="hidden" name="movie_title" value="<?= htmlspecialchars($movie_title) ?>">
     <input type="hidden" name="venue_name" value="<?= htmlspecialchars($venue_name) ?>">
     <input type="hidden" name="cinema_name" value="<?= htmlspecialchars($cinema_name) ?>">
+    <input type="hidden" name="show_time" value="<?= htmlspecialchars($show_time) ?>">
+    <input type="hidden" name="show_date" value="<?= htmlspecialchars($show_date) ?>">
     <input type="hidden" name="price" value="<?= $price ?>">
 
+   <div style="text-align: center;">
     <button type="submit">Confirm Selection</button>
-</form>
+</div>
 
+</form>
+<?php else: ?>
+    <!-- Just say "Please log in to continue" -->
+    <h3 style="text-align: center; margin-top: 50px;">Please log in to continue</h3>
+<?php endif; ?>
 <style>
     .seat-grid {
         display: flex;
